@@ -1,0 +1,1 @@
+export const apiHost = import.meta.env.VITE_BACK_URL;

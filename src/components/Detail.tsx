@@ -8,6 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
+import { apiHost } from "../config";
 
 interface DetailProps {
   open: boolean;
@@ -36,7 +37,7 @@ const Detail: React.FC<DetailProps> = ({ open, onClose, testId }) => {
   const fetchDetails = async (id: string) => {
     setLoading(true);
     try {
-      const response = await fetch(`https://testing-system-backend.vercel.app/api/test/${id}`);
+      const response = await fetch(`${apiHost}/test/${id}`);
       if (!response.ok) {
         throw new Error(`Error al obtener detalles: ${response.statusText}`);
       }

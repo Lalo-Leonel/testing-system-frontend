@@ -12,6 +12,7 @@ import {
     TextField,
   } from "@mui/material";
   import { useState } from "react";
+import { apiHost } from "../config";
   
   interface FormDialogProps {
     open: boolean;
@@ -37,7 +38,7 @@ import {
       };
   
       try {
-        const response = await fetch("https://testing-system-backend.vercel.app/api/test", {
+        const response = await fetch(`${apiHost}/test`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -101,7 +102,9 @@ import {
             label="Solución"
             type="text"
             fullWidth
-            variant="standard"
+            variant="outlined"
+            multiline
+            minRows={2}
           />
         </DialogContent>
         <DialogActions>

@@ -1,4 +1,5 @@
 import {
+  CircularProgress,
   IconButton,
   Paper,
   Table,
@@ -43,9 +44,10 @@ interface Test {
 
 interface TestListProps {
   tests: Test[];
+  loading: boolean;
 }
 
-const TestList: React.FC<TestListProps> = ({ tests }) => {
+const TestList: React.FC<TestListProps> = ({ tests, loading }) => {
   const [open, setOpen] = useState(false);
   const [selectedTest, setSelectedTest] = useState<string | null>(null);
 
@@ -72,33 +74,62 @@ const TestList: React.FC<TestListProps> = ({ tests }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {tests
-              .sort(
-                (a, b) =>
-                  new Date(b.createdAt).getTime() -
-                  new Date(a.createdAt).getTime()
-              )
-              .map((row, index) => (
-                <StyledTableRow key={row._id}>
-                  <StyledTableCell component="th" scope="row">
-                    {index + 1}
-                  </StyledTableCell>
-                  <StyledTableCell align="center">{row.type === "desarrollar"? "Pregunta a desarrollar":"Generación de código"}</StyledTableCell>
-                  <StyledTableCell align="center">
-                    {row.question}
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                    <Tooltip title="Detalles">
-                      <IconButton
-                        style={{ padding: 1 }}
-                        onClick={() => handleOpenDialog(row._id)}
-                      >
-                        <OpenInNew />
-                      </IconButton>
-                    </Tooltip>
+          {loading ? (
+            <StyledTableRow>
+              <StyledTableCell colSpan={4} align="center">
+              <CircularProgress />
+              </StyledTableCell>
+            </StyledTableRow>
+          ) : (
+            <>
+              {tests.length === 0 ? (
+                <StyledTableRow>
+                  <StyledTableCell
+                    component="th"
+                    scope="row"
+                    colSpan={4}
+                    style={{ textAlign: "center" }}
+                  >
+                    Aún no ha registrado ninguna pregunta
                   </StyledTableCell>
                 </StyledTableRow>
-              ))}
+              ) : (
+                <>
+                  {tests
+                    .sort(
+                      (a, b) =>
+                        new Date(b.createdAt).getTime() -
+                        new Date(a.createdAt).getTime()
+                    )
+                    .map((row, index) => (
+                      <StyledTableRow key={row._id}>
+                        <StyledTableCell component="th" scope="row">
+                          {index + 1}
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          {row.type === "desarrollar"
+                            ? "Pregunta a desarrollar"
+                            : "Generación de código"}
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          {row.question}
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          <Tooltip title="Detalles">
+                            <IconButton
+                              style={{ padding: 1 }}
+                              onClick={() => handleOpenDialog(row._id)}
+                            >
+                              <OpenInNew />
+                            </IconButton>
+                          </Tooltip>
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    ))}
+                </>
+              )}
+            </>
+          )}
           </TableBody>
         </Table>
       </TableContainer>
